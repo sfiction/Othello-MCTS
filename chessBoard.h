@@ -48,7 +48,7 @@ namespace Othello{
 			return na < nb ? -1 : na > nb;
 		}
 
-		void print() const;
+		string to_string() const;
 		bool check(Color color, int loc) const;
 		bool play(Color color, int loc);
 		vector<int> getPossible(Color color) const;

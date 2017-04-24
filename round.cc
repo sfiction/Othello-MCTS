@@ -20,6 +20,7 @@ namespace Othello{
 			board.play(BLACK, loc);
 		}
 		else{	// white turn
+			puts("???????????");
 			loc = B.nextStep(board, WHITE);
 			board.play(WHITE, loc);
 		}

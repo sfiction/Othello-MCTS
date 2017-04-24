@@ -26,7 +26,7 @@ namespace Othello{
 		/*
 		 * @return:	[0, 64) if success, otherwise -1
 		 */
-		virtual int nextStep(const ChessBoard &chessBoard, Color color) = 0;
+		virtual int nextStep(const ChessBoard &board, Color color) = 0;
 	};
 
 	/**
@@ -39,7 +39,12 @@ namespace Othello{
 		RandomPlayer(): gen(time(NULL)){
 		}
 
-		int nextStep(const ChessBoard &chessBoard, Color color);
+		int nextStep(const ChessBoard &board, Color color);
+	};
+
+	class HumanPlayer: public Player{
+	public:
+		int nextStep(const ChessBoard &board, Color color);
 	};
 }
 

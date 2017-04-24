@@ -2,8 +2,7 @@
 
 using namespace Othello;
 
-int main(){
-	srand(time(NULL));
+void speedTestOfRandomPlayer(){
 	RandomPlayer a, b;
 
 	const int n = 1e4;
@@ -12,12 +11,24 @@ int main(){
 		Round round(a, b);
 		do{
 			round.nextStep();
-//			round.getBoard().print();
-//			getchar();
 		}while (!round.isEnd());
 		cnt += round.getResult();
-//		printf("%d %d\n", round.getBoard().countBlack(), round.getBoard().countWhite());
 	}
 	fprintf(stderr, "%d\n", cnt);
+}
+
+void randomVsHuman(){
+	RandomPlayer a;
+	HumanPlayer b;
+	Round round(a, b);
+	do{
+		round.nextStep();		
+	}while (!round.isEnd());
+	printf("%d %d\n", round.getBoard().countBlack(), round.getBoard().countWhite());
+}
+
+int main(){
+	srand(time(NULL));
+	randomVsHuman();
 	return 0;
 }

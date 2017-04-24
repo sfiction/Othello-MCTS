@@ -10,14 +10,15 @@
 #include "chessBoard.h"
 
 namespace Othello{
-	void ChessBoard::print() const{
+	string ChessBoard::to_string() const{
+		string ret;
 		const ull &black = board[0], &white = board[1];
 		for (int loc = 0, i = 0; i < 8; ++i){
-			for (int j = 0; j < 8; ++j, ++loc){
-				putchar(black >> loc & 1 ? 'X' : white >> loc & 1 ? 'O' : '.');
-			}
-			puts("");
+			for (int j = 0; j < 8; ++j, ++loc)
+				ret.push_back(black >> loc & 1 ? 'X' : white >> loc & 1 ? 'O' : '.');
+			ret.push_back('\n');
 		}
+		return ret;
 	}
 
 	/**
