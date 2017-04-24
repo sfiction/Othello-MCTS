@@ -1,4 +1,5 @@
-*.[oa]
+*.[oad]
 *.exe
+*.gch
 *~
 *.swp
