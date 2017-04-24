@@ -12,6 +12,8 @@ int main(){
 		Round round(a, b);
 		do{
 			round.nextStep();
+//			round.getBoard().print();
+//			getchar();
 		}while (!round.isEnd());
 		cnt += round.getResult();
 //		printf("%d %d\n", round.getBoard().countBlack(), round.getBoard().countWhite());

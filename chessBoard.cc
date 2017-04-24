@@ -31,14 +31,14 @@ namespace Othello{
 
 		const int MASK = ~7;
 		for (int i = 0; i < 8; ++i){
-			int x = loc >> 3, y = loc & 7, z = loc;
-			do{
-				x += dire[i][0], y += dire[i][1], z += dloc[i];
-			}while (!((x | y) & MASK) && (a >> z & 1));
-			while (!((x | y) & MASK) && (b >> z & 1))
-				x += dire[i][0], y += dire[i][1], z += dloc[i];
-			if (!((x | y) & MASK) && (a >> z & 1))
-				return true;
+			int x = (loc >> 3) + dire[i][0], y = (loc & 7) + dire[i][1], z = loc + dloc[i];
+			if (!((x | y) & MASK) && (b >> z & 1)){
+				do{
+					x += dire[i][0], y += dire[i][1], z += dloc[i];
+				}while (!((x | y) & MASK) && (b >> z & 1));
+				if (!((x | y) & MASK) && (a >> z & 1))
+					return true;
+			}
 		}
 		return false;
 	}
@@ -54,20 +54,15 @@ namespace Othello{
 		const int MASK = ~7;
 		ull flip = 0, t;
 		for (int i = 0; i < 8; ++i){
-			int x = loc >> 3, y = loc & 7, z = loc;
-			while (true){
-				do{
-					x += dire[i][0], y += dire[i][1], z += dloc[i];
-				}while (!((x | y) & MASK) && (a >> z & 1));
+			int x = (loc >> 3) + dire[i][0], y = (loc & 7) + dire[i][1], z = loc + dloc[i];
+			if (!((x | y) & MASK) && (b >> z & 1)){
 				t = 0;
-				while (!((x | y) & MASK) && (b >> z & 1)){
+				do{
 					t |= 1ull << z;
 					x += dire[i][0], y += dire[i][1], z += dloc[i];
-				}
+				}while (!((x | y) & MASK) && (b >> z & 1));
 				if (!((x | y) & MASK) && (a >> z & 1))
 					flip |= t;
-				else
-					break;
 			}
 		}
 		if (flip){
