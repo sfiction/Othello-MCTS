@@ -35,6 +35,19 @@ namespace Othello{
 			return board[WHITE];
 		}
 
+		int countBlack() const{
+			return __builtin_popcountll(board[BLACK]);
+		}
+
+		int countWhite() const{
+			return __builtin_popcountll(board[WHITE]);
+		}
+
+		int getResult() const{
+			int na = countBlack(), nb = countWhite();
+			return na < nb ? -1 : na > nb;
+		}
+
 		void print() const;
 		bool check(Color color, int loc) const;
 		bool play(Color color, int loc);

@@ -32,8 +32,12 @@ namespace Othello{
 			return board;
 		}
 
-		bool isEnd(){
+		bool isEnd() const{
 			return status == 2;
+		}
+
+		int getResult() const{
+			return board.getResult();
 		}
 
 		pair<int, int> nextStep();

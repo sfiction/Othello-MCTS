@@ -26,27 +26,57 @@ namespace Othello{
 	bool ChessBoard::check(Color color, int loc) const{
 		const ull &a = board[color], &b = board[!color];	// bad code
 
-		if (!inRange(loc) || (a & (1ull << loc)))
+		if (!inRange(loc) || ((a | b) & (1ull << loc)))
 			return false;
 
+		const int MASK = ~7;
+		for (int i = 0; i < 8; ++i){
+			int x = loc >> 3, y = loc & 7, z = loc;
+			do{
+				x += dire[i][0], y += dire[i][1], z += dloc[i];
+			}while (!((x | y) & MASK) && (a >> z & 1));
+			while (!((x | y) & MASK) && (b >> z & 1))
+				x += dire[i][0], y += dire[i][1], z += dloc[i];
+			if (!((x | y) & MASK) && (a >> z & 1))
+				return true;
+		}
 		return false;
 	}
 
 	bool ChessBoard::play(Color color, int loc){
 		if (loc == -1)	// not an effective step
 			return true;
-		if (!check(color, loc))
+
+		ull &a = board[color], &b = board[!color];	// bad code
+		if (!inRange(loc) || ((a | b) & (1ull << loc)))
 			return false;
 
-		board[color] |= 1ull << loc;
-		return true;
-
-
-		if (!inRange(loc))
+		const int MASK = ~7;
+		ull flip = 0, t;
+		for (int i = 0; i < 8; ++i){
+			int x = loc >> 3, y = loc & 7, z = loc;
+			while (true){
+				do{
+					x += dire[i][0], y += dire[i][1], z += dloc[i];
+				}while (!((x | y) & MASK) && (a >> z & 1));
+				t = 0;
+				while (!((x | y) & MASK) && (b >> z & 1)){
+					t |= 1ull << z;
+					x += dire[i][0], y += dire[i][1], z += dloc[i];
+				}
+				if (!((x | y) & MASK) && (a >> z & 1))
+					flip |= t;
+				else
+					break;
+			}
+		}
+		if (flip){
+			a ^= flip, b ^= flip;	// flip covered chess
+			a |= 1ull << loc;	// new chess
+			return true;
+		}
+		else
 			return false;
-		if (!check(color, loc))
-			return false;
-		return false;
 	}
 
 	vector<int> ChessBoard::getPossible(Color color) const{

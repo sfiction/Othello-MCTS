@@ -6,11 +6,9 @@ namespace Othello{
 		vector<int> lst = chessBoard.getPossible(color);
 		int ret = -1;
 		if (lst.size()){
-			int t = gen() % lst.size();
+			int t = rand() % lst.size();
 			ret = lst[t];
 		}
-		printf("%d %d\n", color, ret);
-		getchar();
 		return ret;
 	};
 }
