@@ -23,6 +23,10 @@ namespace Othello{
 		}
 
 	public:
+		bool isFull() const{
+			return (board[0] | board[1]) == -1;
+		}
+
 		ull getBoard(Color flag) const{
 			return board[!!flag];
 		}

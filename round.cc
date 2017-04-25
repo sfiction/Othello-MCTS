@@ -25,6 +25,8 @@ namespace Othello{
 			board.play(WHITE, loc);
 		}
 		status += loc == -1;
+		if (board.isFull())
+			status = 2;
 		return make_pair(step, loc);
 	}
 }
