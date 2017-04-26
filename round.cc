@@ -23,7 +23,10 @@ namespace Othello{
 			loc = B.nextStep(board, WHITE);
 			board.play(WHITE, loc);	// without check
 		}
-		status += loc == -1;
+		if (loc == -1)
+			++status;
+		else
+			status = 0;
 		if (board.isFull())
 			status = 2;
 		return loc;
@@ -37,7 +40,10 @@ namespace Othello{
 			board.play(BLACK, loc);
 		else
 			board.play(WHITE, loc);
-		status += loc == -1;
+		if (loc == -1)
+			++status;
+		else
+			status = 0;
 		if (board.isFull())
 			status = 2;
 	}

@@ -44,7 +44,7 @@ namespace Othello{
 	}
 
 	double MCTSPlayer::Node::value(){
-		const double c = 2.0;
+		const double c = 5.0;
 		return (double)q / n + c * sqrt(2.0 * log(fa->n) / n);
 	}
 
@@ -83,15 +83,18 @@ namespace Othello{
 
 				/* tree policy */
 				int loc;
-				for (; u->loc.size() == u->child.size(); u = u->child[loc]){
+				for (; !round.isEnd() && u->loc.size() == u->child.size(); u = u->child[loc]){
 					loc = u->bestChild();
 					round.nextStep(loc);
 				}
-				loc = u->expand(round);
-				u = u->child[loc];
+				
+				if (!round.isEnd()){					
+					loc = u->expand(round);
+					u = u->child[loc];
 
-				/* simulate */
-				round.play();
+					/* simulate */
+					round.play();
+				}
 
 				/* backup */
 				int reward = sign * round.getResult();
@@ -108,6 +111,12 @@ namespace Othello{
 		int loc = root->loc[ret];
 		double ratio = 1.0 * root->child[ret]->q / root->child[ret]->n;
 		fprintf(stderr, "MCTSPlayer: step: %d, ratio: %.8f\n", loc, ratio);
+		
+		for (size_t i = 0; i < root->loc.size(); ++i){
+			fprintf(stderr, "(%d, %d), ", root->child[i]->q, root->child[i]->n);
+		}
+		fprintf(stderr, "\n");
+		
 		delete root;
 
 		return loc;
