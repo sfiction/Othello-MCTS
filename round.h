@@ -19,7 +19,7 @@ namespace Othello{
 		Round(const Round &t);
 		
 	public:
-		Round(Player &a, Player &b);
+		Round(Player &a, Player &b, const ChessBoard &board = ChessBoard(), int step = 0, int status = 0);
 
 		/**
 		 * @return	number of passed step
@@ -40,7 +40,9 @@ namespace Othello{
 			return board.getResult();
 		}
 
-		pair<int, int> nextStep();
+		int nextStep();
+		void nextStep(int loc);
+		int play();
 	};
 }
 

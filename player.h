@@ -42,6 +42,9 @@ namespace Othello{
 		int nextStep(const ChessBoard &board, Color color);
 	};
 
+	/**
+	 * @brief	human player
+	 */
 	class HumanPlayer: public Player{
 	public:
 		int nextStep(const ChessBoard &board, Color color);

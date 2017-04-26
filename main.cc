@@ -29,6 +29,7 @@ void randomVsHuman(){
 
 int main(){
 	srand(time(NULL));
-	randomVsHuman();
+	speedTestOfRandomPlayer();
+//	randomVsHuman();
 	return 0;
 }

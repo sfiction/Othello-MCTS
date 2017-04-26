@@ -24,7 +24,7 @@ namespace Othello{
 
 	public:
 		bool isFull() const{
-			return (board[0] | board[1]) == -1;
+			return (board[0] | board[1]) == ~0ull;
 		}
 
 		ull getBoard(Color flag) const{
@@ -55,6 +55,7 @@ namespace Othello{
 		string to_string() const;
 		bool check(Color color, int loc) const;
 		bool play(Color color, int loc);
+		ull getPossibleUll(Color color) const;
 		vector<int> getPossible(Color color) const;
 
 		ChessBoard(){
