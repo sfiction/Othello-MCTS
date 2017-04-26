@@ -25,6 +25,9 @@ namespace Othello{
 		loc = board.getPossible(color);
 		if (loc.size() == 0)
 			loc.push_back(-1);
+		else{
+			random_shuffle(loc.begin(), loc.end());
+		}
 	}
 
 	MCTSPlayer::Node::~Node(){
@@ -70,9 +73,9 @@ namespace Othello{
 		Node *root = new Node(board, color, NULL);
 
 		int sign = color == BLACK ? 1 : -1;
-
+#ifdef DEBUG
 		fprintf(stderr, "MCTSPlayer: search start\n");
-
+#endif
 		const int iterN = 1e3;
 		int endTime = clock() + 1000, tot = 0;	// 1s under windows
 		RandomPlayer A;
@@ -105,17 +108,20 @@ namespace Othello{
 			}
 			++tot;
 		}while (clock() <= endTime);
-		fprintf(stderr, "MCTSPlayer: simulate rounds: %d\n", tot * iterN);
 
 		int id = root->bestChildRate();
 		int loc = root->loc[id];
+		
+#ifdef DEBUG
 		double ratio = 1.0 * root->child[id]->q / root->child[id]->n;
+		fprintf(stderr, "MCTSPlayer: simulate rounds: %d\n", tot * iterN);
 		fprintf(stderr, "MCTSPlayer: step: %d (%d, %d), ratio: %.8f\n", loc, loc >> 3, loc & 7, ratio);
 		
 		for (size_t i = 0; i < root->loc.size(); ++i){
 			fprintf(stderr, "(%d, %d), ", root->child[i]->q, root->child[i]->n);
 		}
 		fprintf(stderr, "\n");
+#endif
 		
 		delete root;
 
