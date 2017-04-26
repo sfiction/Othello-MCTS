@@ -82,15 +82,15 @@ namespace Othello{
 				auto u = root;
 
 				/* tree policy */
-				int loc;
-				for (; !round.isEnd() && u->loc.size() == u->child.size(); u = u->child[loc]){
-					loc = u->bestChild();
-					round.nextStep(loc);
+				int id;
+				for (; !round.isEnd() && u->loc.size() == u->child.size(); u = u->child[id]){
+					id = u->bestChild();
+					round.nextStep(u->loc[id]);
 				}
 				
-				if (!round.isEnd()){					
-					loc = u->expand(round);
-					u = u->child[loc];
+				if (!round.isEnd()){
+					id = u->expand(round);
+					u = u->child[id];
 
 					/* simulate */
 					round.play();
@@ -107,10 +107,10 @@ namespace Othello{
 		}while (clock() <= endTime);
 		fprintf(stderr, "MCTSPlayer: simulate rounds: %d\n", tot * iterN);
 
-		int ret = root->bestChildRate();
-		int loc = root->loc[ret];
-		double ratio = 1.0 * root->child[ret]->q / root->child[ret]->n;
-		fprintf(stderr, "MCTSPlayer: step: %d, ratio: %.8f\n", loc, ratio);
+		int id = root->bestChildRate();
+		int loc = root->loc[id];
+		double ratio = 1.0 * root->child[id]->q / root->child[id]->n;
+		fprintf(stderr, "MCTSPlayer: step: %d (%d, %d), ratio: %.8f\n", loc, loc >> 3, loc & 7, ratio);
 		
 		for (size_t i = 0; i < root->loc.size(); ++i){
 			fprintf(stderr, "(%d, %d), ", root->child[i]->q, root->child[i]->n);

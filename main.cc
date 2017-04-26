@@ -39,11 +39,29 @@ void MCTSTest(){
 	printf("%d %d\n", round.getBoard().countBlack(), round.getBoard().countWhite());
 }
 
+void MCTSSingleStepTest(){
+	MCTSPlayer a;
+	ChessBoard board(0x001E0E46426040E1, 0xFE61F1B9BD9FBF1E);
+	printf("%s\n", board.to_string().c_str());
+	a.nextStep(board, BLACK);
+}
+
+void MCTSVsHuman(){
+	MCTSPlayer a;
+	HumanPlayer b;
+	Round round(a, b);
+	do{
+		round.nextStep();
+	}while (!round.isEnd());
+	printf("%d %d\n", round.getBoard().countBlack(), round.getBoard().countWhite());
+}
+
 int main(){
 	srand(time(NULL));
 //	speedTestOfRandomPlayer();
 //	randomVsHuman();
-	printf("QvQ");
 	MCTSTest();
+//	MCTSSingleStepTest();
+//	MCTSVsHuman();
 	return 0;
 }
