@@ -32,12 +32,14 @@ namespace Othello{
 			delete u;
 	}
 
-	int MCTSPlayer::Node::expand(const ChessBoard &board, Color color){
+	int MCTSPlayer::Node::expand(Round &round){
 		if (loc.size() == child.size())
 			return -1;
 		else{
-			child.push_back(new Node(board, color, this));
-			return child.size() - 1;
+			int ret = child.size();
+			round.nextStep(loc[ret]);
+			child.push_back(new Node(round.getBoard(), round.nextColor(), this));
+			return ret;
 		}
 	}
 
@@ -72,7 +74,7 @@ namespace Othello{
 		fprintf(stderr, "MCTSPlayer: search start\n");
 
 		const int iterN = 1e3;
-		int endTime = clock() + 2000, tot = 0;	// 1s under windows
+		int endTime = clock() + 1000, tot = 0;	// 1s under windows
 		RandomPlayer A;
 		do{
 			for (int iter = 0; iter < iterN; ++iter){
@@ -85,8 +87,7 @@ namespace Othello{
 					loc = u->bestChild();
 					round.nextStep(loc);
 				}
-				loc = u->expand();
-				round.nextStep(loc);
+				loc = u->expand(round);
 				u = u->child[loc];
 
 				/* simulate */
@@ -103,12 +104,13 @@ namespace Othello{
 		}while (clock() <= endTime);
 		fprintf(stderr, "MCTSPlayer: simulate rounds: %d\n", tot * iterN);
 
-		int ret = root->loc[root->bestChildRate()];
+		int ret = root->bestChildRate();
+		int loc = root->loc[ret];
+		double ratio = 1.0 * root->child[ret]->q / root->child[ret]->n;
+		fprintf(stderr, "MCTSPlayer: step: %d, ratio: %.8f\n", loc, ratio);
 		delete root;
 
-		printf("MCTS Result: %d\n", ret);
-
-		return ret;
+		return loc;
 	}
 }
 

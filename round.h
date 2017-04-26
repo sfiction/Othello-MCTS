@@ -27,6 +27,10 @@ namespace Othello{
 		int currentStep() const{
 			return step;
 		}
+		
+		Color nextColor() const{
+			return step & 1 ? WHITE : BLACK;
+		}
 
 		const ChessBoard& getBoard() const{
 			return board;

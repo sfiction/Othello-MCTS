@@ -1,5 +1,5 @@
 CC=g++
-CPPFLAGS=-Wall -O2 -std=c++14
+CPPFLAGS=-Wall -O2 -std=c++11
 INCLUDEFLAGS=
 LDFLAGS=
 OBJS=chessboard.o player.o round.o MCTSplayer.o main.o

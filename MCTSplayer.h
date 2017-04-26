@@ -31,7 +31,7 @@ namespace Othello{
 			vector<int> loc;
 			vector<Node*> child;
 
-			int expand(const ChessBoard &board = ChessBoard(), Color color = BLACK);
+			int expand(Round &round);
 			double value();
 			int bestChild();
 			int bestChildRate();

@@ -43,6 +43,7 @@ int main(){
 	srand(time(NULL));
 //	speedTestOfRandomPlayer();
 //	randomVsHuman();
+	printf("QvQ");
 	MCTSTest();
 	return 0;
 }
