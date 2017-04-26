@@ -7,8 +7,8 @@
  * @brief	Othello player implemented by MCTS
  */
 
-#ifndef __OTHELLO_PLAYER
-#define __OTHELLO_PLAYER
+#ifndef __OTHELLO_MCTSPLAYER
+#define __OTHELLO_MCTSPLAYER
 
 #include <ctime>
 #include <random>
@@ -31,23 +31,16 @@ namespace Othello{
 			vector<int> loc;
 			vector<Node*> child;
 
-			Node* expand();
+			int expand(const ChessBoard &board = ChessBoard(), Color color = BLACK);
 			double value();
 			int bestChild();
 			int bestChildRate();
-			Node();
+			Node(const ChessBoard &board = ChessBoard(), Color color = BLACK, Node *fa = NULL);
 			~Node();
 		};
-		vector<Node*> lst;
-
-		Node* getNode();
-		void delNode();
-
-		static childValue();
 
 	public:
 		int nextStep(const ChessBoard &board, Color color);
-		~MCTSPlayer();
 	};
 }
 

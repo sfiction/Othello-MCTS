@@ -22,14 +22,27 @@ void randomVsHuman(){
 	HumanPlayer b;
 	Round round(a, b);
 	do{
-		round.nextStep();		
+		round.nextStep();
+	}while (!round.isEnd());
+	printf("%d %d\n", round.getBoard().countBlack(), round.getBoard().countWhite());
+}
+
+void MCTSTest(){
+	RandomPlayer a;
+	MCTSPlayer b;
+
+	Round round(b, a);
+	do{
+		round.nextStep();
+		printf("%s\n", round.getBoard().to_string().c_str());
 	}while (!round.isEnd());
 	printf("%d %d\n", round.getBoard().countBlack(), round.getBoard().countWhite());
 }
 
 int main(){
 	srand(time(NULL));
-	speedTestOfRandomPlayer();
+//	speedTestOfRandomPlayer();
 //	randomVsHuman();
+	MCTSTest();
 	return 0;
 }

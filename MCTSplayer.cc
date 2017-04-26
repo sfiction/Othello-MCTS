@@ -20,7 +20,11 @@ namespace Othello{
 		lst.push_back(u);
 	}*/
 
-	MCTSPlayer::Node::Node(){
+	MCTSPlayer::Node::Node(const ChessBoard &board, Color color, Node *fa):
+		q(0), n(0), fa(fa){
+		loc = board.getPossible(color);
+		if (loc.size() == 0)
+			loc.push_back(-1);
 	}
 
 	MCTSPlayer::Node::~Node(){
@@ -28,12 +32,12 @@ namespace Othello{
 			delete u;
 	}
 
-	MCTSPlayer::Node* MCTSPlayer::Node::expand(){
+	int MCTSPlayer::Node::expand(const ChessBoard &board, Color color){
 		if (loc.size() == child.size())
-			return NULL;
+			return -1;
 		else{
-			child.push_back(new Node);
-			return child.back();
+			child.push_back(new Node(board, color, this));
+			return child.size() - 1;
 		}
 	}
 
@@ -44,7 +48,7 @@ namespace Othello{
 
 	int MCTSPlayer::Node::bestChild(){
 		int ret = -1;
-		double retVal = -1, t;
+		double retVal = -1e300, t;
 		for (size_t i = 0; i < loc.size(); ++i)
 			if (child[i] != NULL && retVal < (t = child[i]->value()))
 				ret = i, retVal = t;
@@ -53,7 +57,7 @@ namespace Othello{
 
 	int MCTSPlayer::Node::bestChildRate(){
 		int ret = 0;
-		double retVal = -1, t;
+		double retVal = -1e300, t;
 		for (size_t i = 0; i < loc.size(); ++i)
 			if (child[i] != NULL && retVal < (t = 1.0 * child[i]->q / child[i]->n))
 				ret = i, retVal = t;
@@ -61,27 +65,49 @@ namespace Othello{
 	}
 
 	int MCTSPlayer::nextStep(const ChessBoard &board, Color color){
-		Node *root = new Node;
+		Node *root = new Node(board, color, NULL);
+
+		int sign = color == BLACK ? 1 : -1;
+
+		fprintf(stderr, "MCTSPlayer: search start\n");
 
 		const int iterN = 1e3;
-		unsigned endTime = clock() + 1000, tot = 0;	// 1s under windows
+		int endTime = clock() + 2000, tot = 0;	// 1s under windows
 		RandomPlayer A;
 		do{
 			for (int iter = 0; iter < iterN; ++iter){
 				Round round(A, A, board, (int)color);
-
 				auto u = root;
-				for (int loc; u->loc.size() == u->child.size(); u = u->child[u->bestChild()]){
+
+				/* tree policy */
+				int loc;
+				for (; u->loc.size() == u->child.size(); u = u->child[loc]){
 					loc = u->bestChild();
 					round.nextStep(loc);
 				}
-				u = u->expand();
-			}
-		}while (clock() + endTime);
-		fprintf(stderr, "MCTSPlayer: simulate rounds: %u\n", tot * iterN);
+				loc = u->expand();
+				round.nextStep(loc);
+				u = u->child[loc];
 
-		int ret = root->bestChildRate();
+				/* simulate */
+				round.play();
+
+				/* backup */
+				int reward = sign * round.getResult();
+				for (; u != NULL; u = u->fa){
+					++u->n;
+					u->q += reward;
+				}
+			}
+			++tot;
+		}while (clock() <= endTime);
+		fprintf(stderr, "MCTSPlayer: simulate rounds: %d\n", tot * iterN);
+
+		int ret = root->loc[root->bestChildRate()];
 		delete root;
+
+		printf("MCTS Result: %d\n", ret);
+
 		return ret;
 	}
 }

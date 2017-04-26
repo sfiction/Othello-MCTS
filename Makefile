@@ -2,7 +2,7 @@ CC=g++
 CPPFLAGS=-Wall -O2 -std=c++14
 INCLUDEFLAGS=
 LDFLAGS=
-OBJS=chessboard.o player.o round.o main.o
+OBJS=chessboard.o player.o round.o MCTSplayer.o main.o
 TARGETS=Othello
 
 .PHONY: all

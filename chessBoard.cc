@@ -85,11 +85,10 @@ namespace Othello{
 	}
 
 	vector<int> ChessBoard::getPossible(Color color) const{
-		ull res = getPossibleUll(color);
 		vector<int> ret;
 		for (int loc = 0, i = 0; i < 8; ++i)
 			for (int j = 0; j < 8; ++j, ++loc)
-				if (res >> loc & 1)
+				if (check(color, loc))
 					ret.push_back(loc);
 		return ret;
 	}
