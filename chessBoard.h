@@ -23,6 +23,9 @@ namespace Othello{
 		}
 
 	public:
+		/**
+		 * @brief	check the chess board if ull or not
+		 */
 		bool isFull() const{
 			return (board[0] | board[1]) == ~0ull;
 		}
@@ -47,15 +50,41 @@ namespace Othello{
 			return __builtin_popcountll(board[WHITE]);
 		}
 
+		/**
+		 * @brief	the score (1, 0, -1) of Black (first player)
+		 */
 		int getResult() const{
 			int na = countBlack(), nb = countWhite();
 			return na < nb ? -1 : na > nb;
 		}
 
+		/**
+		 * @brief	ASCII graph of current chess board
+		 */
 		string to_string() const;
+
+		/**
+		 * @brief	check the step is valid or not
+		 */
 		bool check(Color color, int loc) const;
+
+		/**
+		 * @brief	play a step
+		 * @retVal	true	valid and played
+		 * @retVal	false	invalid
+		 */
 		bool play(Color color, int loc);
+
+		/**
+		 * @brief	possible steps of color
+		 * @return	(ret >> (x << 3 | y) & 1) indicate its availability
+		 */
 		ull getPossibleUll(Color color) const;
+
+		/**
+		 * @brief	possible steps of color
+		 * @return	location is (ret[i] >> 3, ret[i] & 7)
+		 */
 		vector<int> getPossible(Color color) const;
 
 		ChessBoard(){
