@@ -24,6 +24,7 @@ namespace Othello{
 	 * @brief	AI implemented by MCTS
 	 */
 	class MCTSPlayer: public Player{
+	protected:
 		struct Node{
 			int q, n;	/// total score; total rounds
 			Node *fa;	/// father node
