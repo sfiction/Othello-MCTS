@@ -80,12 +80,14 @@ namespace Othello{
 		 * @return	(ret >> (x << 3 | y) & 1) indicate its availability
 		 */
 		ull getPossibleUll(Color color) const;
+		ull getPossibleUllOld(Color color) const;
 
 		/**
 		 * @brief	possible steps of color
 		 * @return	location is (ret[i] >> 3, ret[i] & 7)
 		 */
 		vector<int> getPossible(Color color) const;
+		vector<int> getPossibleOld(Color color) const;
 
 		ChessBoard(){
 			board[0] = 1ull << 28 | 1ull << 35;
