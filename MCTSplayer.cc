@@ -78,7 +78,7 @@ namespace Othello{
 		Node *root = new Node(board, color, NULL);
 
 		const int iterN = 1e3;
-		int endTime = clock() + 1000, tot = 0;	// 1s under windows
+		int endTime = clock() + 100, tot = 0;	// 1s under windows
 		RandomPlayer A;
 		do{
 			for (int iter = 0; iter < iterN; ++iter){
@@ -92,7 +92,7 @@ namespace Othello{
 					round.nextStep(u->loc[id]);
 				}
 				
-				int sign = round.nextColor() == color ? -1 : 1;
+				int sign = round.nextColor() == BLACK ? -1 : 1;
 				if (!round.isEnd()){
 					sign = -sign;
 					id = u->expand(round);
@@ -121,7 +121,7 @@ namespace Othello{
 
 	int MCTSPlayer::nextStep(const ChessBoard &board, Color color){
 #ifdef DEBUG
-		fprintf(stderr, "MCTSPlayer: search start\n");
+		fprintf(stderr, "MCTSPlayer: search start, color = %s\n", color == BLACK ? "Black" : "White");
 #endif
 
 		auto root = MCTSEval(board, color);
