@@ -66,6 +66,7 @@ namespace Othello{
 			if (done)
 				return;
 
+			done = true;
 			for (int i = m - 1; i >= 0; --i){
 				int mask = (m - 1) ^ i;
 				for (int j = mask; j > 0; j = (j - 1) & mask)
@@ -74,12 +75,12 @@ namespace Othello{
 			}
 
 			for (int k = 1; k < n; ++k){
-				int mlow = (1 << n - k) - 1, mhigh = (m - 1) ^ mlow;
+				int mlow = (1 << (n - k)) - 1, mhigh = (m - 1) ^ mlow;
 				for (int i = m - 1; i >= 0; --i){
 					int ilow = i & mlow, ihigh = i & mhigh;
 					int mask = (m - 1) ^ i;
 					for (int j = mask; j > 0; j = (j - 1) & mask)
-						sel[k][i][j] = sel[0][ihigh][j & mhigh] & mhigh | sel[0][ilow][j & mlow] & mlow;
+						sel[k][i][j] = (sel[0][ihigh][j & mhigh] & mhigh) | (sel[0][ilow][j & mlow] & mlow);
 					sel[k][i][0] = sel[0][ihigh][0] | sel[0][ilow][0];;
 				}
 			}
