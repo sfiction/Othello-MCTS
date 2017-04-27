@@ -33,6 +33,7 @@ namespace Othello{
 
 			int expand(Round &round);
 			double value();
+			double rate();
 			int bestChild();
 			int bestChildRate();
 			Node(const ChessBoard &board = ChessBoard(), Color color = BLACK, Node *fa = NULL);
@@ -40,6 +41,7 @@ namespace Othello{
 		};
 
 	public:
+		Node* MCTSEval(const ChessBoard &board, Color color);
 		int nextStep(const ChessBoard &board, Color color);
 	};
 }

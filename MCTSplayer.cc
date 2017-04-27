@@ -51,8 +51,12 @@ namespace Othello{
 		return (double)q / n + c * sqrt(2.0 * log(fa->n) / n);
 	}
 
+	double MCTSPlayer::Node::rate(){
+		return (double)q / n;
+	}
+
 	int MCTSPlayer::Node::bestChild(){
-		int ret = -1;
+		int ret = 0;
 		double retVal = -1e300, t;
 		for (size_t i = 0; i < loc.size(); ++i)
 			if (child[i] != NULL && retVal < (t = child[i]->value()))
@@ -64,20 +68,16 @@ namespace Othello{
 		int ret = 0;
 		double retVal = -1e300, t;
 		for (size_t i = 0; i < loc.size(); ++i)
-			if (child[i] != NULL && retVal < (t = 1.0 * child[i]->q / child[i]->n))
+			if (child[i] != NULL && retVal < (t = child[i]->rate()))
 				ret = i, retVal = t;
 		return ret;
 	}
 
-	int MCTSPlayer::nextStep(const ChessBoard &board, Color color){
+	MCTSPlayer::Node* MCTSPlayer::MCTSEval(const ChessBoard &board, Color color){
 		Node *root = new Node(board, color, NULL);
-#define DEBUG
-#ifdef DEBUG
-		fprintf(stderr, "MCTSPlayer: search start\n");
-#endif
 
 		const int iterN = 1e3;
-		int endTime = clock() + 100, tot = 0;	// 1s under windows
+		int endTime = clock() + 1000, tot = 0;	// 1s under windows
 		RandomPlayer A;
 		do{
 			for (int iter = 0; iter < iterN; ++iter){
@@ -111,11 +111,19 @@ namespace Othello{
 			++tot;
 		}while (clock() <= endTime);
 
-		int id = root->bestChildRate();
-		int loc = root->loc[id];
+		return root;
+	}
+
+	int MCTSPlayer::nextStep(const ChessBoard &board, Color color){
+#ifdef DEBUG
+		fprintf(stderr, "MCTSPlayer: search start\n");
+#endif
+
+		auto root = MCTSEval(board, color);
+		int id = root->bestChildRate(), loc = root->loc[id];
 		
 #ifdef DEBUG
-		double ratio = 1.0 * root->child[id]->q / root->child[id]->n;
+		double ratio = root->child[id]->rate();
 		fprintf(stderr, "MCTSPlayer: simulate rounds: %d\n", tot * iterN);
 		fprintf(stderr, "MCTSPlayer: step: %d (%d, %d), ratio: %.8f\n", loc, loc >> 3, loc & 7, ratio);
 		
@@ -123,8 +131,8 @@ namespace Othello{
 			fprintf(stderr, "(%d, %d), ", root->child[i]->q, root->child[i]->n);
 		}
 		fprintf(stderr, "\n");
-#endif
-		
+#endif	
+
 		delete root;
 
 		return loc;
