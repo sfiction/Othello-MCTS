@@ -26,6 +26,7 @@ namespace Othello{
 		if (loc.size() == 0)
 			loc.push_back(-1);
 		else{
+			/// randomly select next child to be expanded
 			random_shuffle(loc.begin(), loc.end());
 		}
 	}
@@ -139,6 +140,14 @@ namespace Othello{
 		delete root;
 
 		return loc;
+	}
+
+	pair<int, double> MCTSPlayer::evaluate(const ChessBoard &board, Color color){
+		auto root = MCTSEval(board, color);
+		int id = root->bestChildRate(), loc = root->loc[id];
+		double rate = root->child[id]->rate();
+		delete root;
+		return make_pair(loc, rate);
 	}
 }
 
