@@ -10,6 +10,65 @@
 #include "chessBoard.h"
 
 namespace Othello{
+	/**
+	 * @brief	pretreatment of chess board
+	 */
+	namespace ChessBoardPretreatment{
+		static const int n = 8, m = 1 << n;
+		int sel[n][m][m];
+
+		static inline int solve(int a, int b){
+			int ret = 0;
+			for (int i = 0; i < 6; ++i)
+				if (a >> i & b >> (i + 1) & 1){
+					for (i += 2; b >> i & 1; ++i);
+					ret |= 1 << i & ~(a | b);
+				}
+			for (int i = 7; i > 1; --i)
+				if (a >> i & b >> (i - 1) & 1){
+					for (i -= 2; i && b >> i & 1; --i);
+					ret |= 1 << i & ~(a | b);
+				}
+			return ret & 255;
+		}
+
+		static void chessBoardPretreatment(){
+			static bool done = false;
+			if (done)
+				return;
+
+			for (int i = m - 1; i >= 0; --i){
+				int mask = (m - 1) ^ i;
+				for (int j = mask; j > 0; j = (j - 1) & mask)
+					sel[0][i][j] = solve(i, j);
+				sel[0][i][0] = solve(i, 0);
+			}
+
+			for (int k = 1; k < n; ++k){
+				int mlow = (1 << k) - 1, mhigh = (m - 1) ^ mlow;
+				for (int i = m - 1; i >= 0; --i){
+					int ilow = i & mlow, ihigh = i & mhigh;
+					int mask = (m - 1) ^ i;
+					for (int j = mask; j > 0; j = (j - 1) & mask)
+						sel[k][i][j] = sel[0][ihigh][j & mhigh] | sel[0][ilow][j & mlow];
+					sel[k][i][0] = sel[0][ihigh][0] | sel[0][ilow][0];;
+				}
+			}
+		}
+
+		/**
+		 * @brief	booter of pretreatment of chess board
+		 */
+		class ChessBoardPretreatmentBooter{
+		public:
+			ChessBoardPretreatmentBooter(){
+				chessBoardPretreatment();
+			}
+		}chessBoradPretreatmentBooter;
+	}
+
+	namespace CBP = ChessBoardPretreatment;
+
 	string ChessBoard::to_string() const{
 		string ret("  01234567\n");
 		const ull &black = board[0], &white = board[1];
