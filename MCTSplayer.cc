@@ -111,6 +111,10 @@ namespace Othello{
 			++tot;
 		}while (clock() <= endTime);
 
+#ifdef DEBUG
+		fprintf(stderr, "MCTSPlayer: simulate rounds: %d\n", tot * iterN);
+#endif
+
 		return root;
 	}
 
@@ -124,7 +128,6 @@ namespace Othello{
 		
 #ifdef DEBUG
 		double ratio = root->child[id]->rate();
-		fprintf(stderr, "MCTSPlayer: simulate rounds: %d\n", tot * iterN);
 		fprintf(stderr, "MCTSPlayer: step: %d (%d, %d), ratio: %.8f\n", loc, loc >> 3, loc & 7, ratio);
 		
 		for (size_t i = 0; i < root->loc.size(); ++i){
