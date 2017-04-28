@@ -6,6 +6,7 @@
 #include "player.h"
 #include "round.h"
 #include "MCTSplayer.h"
+#include "GRANDMCTSPlayer.h"
 
 #endif
 
