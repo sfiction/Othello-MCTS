@@ -77,8 +77,9 @@ namespace Othello{
 	MCTSPlayer::Node* MCTSPlayer::MCTSEval(const ChessBoard &board, Color color){
 		Node *root = new Node(board, color, NULL);
 
-		const int iterN = 1e3;
-		int endTime = clock() + 100, tot = 0;	// 1s under windows
+		const int iterN = 1e3, timeLimit = 0.5 * CLOCKS_PER_SEC;
+		clock_t startTime = clock();
+		int tot = 0;
 		RandomPlayer A;
 		do{
 			for (int iter = 0; iter < iterN; ++iter){
@@ -110,7 +111,7 @@ namespace Othello{
 				}
 			}
 			++tot;
-		}while (clock() <= endTime);
+		}while (clock() - startTime <= timeLimit);
 
 #ifdef DEBUG
 		fprintf(stderr, "MCTSPlayer: simulate rounds: %d\n", tot * iterN);
