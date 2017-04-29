@@ -36,7 +36,7 @@ namespace Othello{
 			 * @brief	expand next child;
 			 * @note	it will also play a step on round
 			 */
-			int expand(Round &round);
+			int expand(RoundBase &round);
 
 			/**
 			 * @brief	calculate the value by UCT

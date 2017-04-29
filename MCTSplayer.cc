@@ -36,7 +36,7 @@ namespace Othello{
 			delete u;
 	}
 
-	int MCTSPlayer::Node::expand(Round &round){
+	int MCTSPlayer::Node::expand(RoundBase &round){
 		if (loc.size() == child.size())
 			return -1;
 		else{
@@ -83,7 +83,7 @@ namespace Othello{
 		RandomPlayer A;
 		do{
 			for (int iter = 0; iter < iterN; ++iter){
-				Round round(A, A, board, (int)color);
+				RoundBase round(A, A, board, (int)color);
 				auto u = root;
 
 				/* tree policy */

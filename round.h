@@ -10,16 +10,16 @@
 namespace Othello{
 	using namespace std;
 
-	class Round{
+	class RoundBase{
 		Player &A, &B;
 
 		int step, status;
 		ChessBoard board;
 
-		Round(const Round &t);
-		
+		RoundBase(const RoundBase &t);
+
 	public:
-		Round(Player &a, Player &b, const ChessBoard &board = ChessBoard(), int step = 0, int status = 0);
+		RoundBase(Player &a, Player &b, const ChessBoard &board = ChessBoard(), int step = 0, int status = 0);
 
 		/**
 		 * @return	number of passed step
@@ -27,7 +27,7 @@ namespace Othello{
 		int currentStep() const{
 			return step;
 		}
-		
+
 		Color nextColor() const{
 			return step & 1 ? WHITE : BLACK;
 		}
@@ -47,6 +47,34 @@ namespace Othello{
 		int nextStep();
 		void nextStep(int loc);
 		int play();
+	};
+
+	class Round: public RoundBase{
+		double timeCost;
+
+	public:
+		Round(Player &a, Player &b, const ChessBoard &board = ChessBoard(), int step = 0, int status = 0):
+			RoundBase(a, b, board, step, status),
+			timeCost(0){
+		}
+
+		/**
+		 * @brief	time cost of last step in milisecons
+		 */
+		double getTime(){
+			return timeCost;
+		}
+
+		int nextStep(){
+			clock_t start = clock();
+			int ret = RoundBase::nextStep();
+			timeCost = (clock() - start) / (CLOCKS_PER_SEC / 1000.0);
+			return ret;
+		}
+
+		void nextStep(int loc){
+			RoundBase::nextStep(loc);
+		}
 	};
 }
 

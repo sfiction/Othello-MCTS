@@ -1,7 +1,7 @@
 #include "round.h"
 
 namespace Othello{
-	Round::Round(Player &a, Player &b, const ChessBoard &board, int step, int status):
+	RoundBase::RoundBase(Player &a, Player &b, const ChessBoard &board, int step, int status):
 		A(a), B(b),
 		step(step), status(status),
 		board(board){
@@ -10,19 +10,15 @@ namespace Othello{
 	/**
 	 * @return	passed steps and status, [0, 64) loc, -1 failed, -2 already ended
 	 */
-	int Round::nextStep(){
+	int RoundBase::nextStep(){
 		if (isEnd())
 			return -2;
 
 		int loc = -1;
-		if (++step & 1){	// black turn
-			loc = A.nextStep(board, BLACK);
-			board.play(BLACK, loc);	// without check
-		}
-		else{	// white turn
-			loc = B.nextStep(board, WHITE);
-			board.play(WHITE, loc);	// without check
-		}
+		if (++step & 1)	// black turn
+			board.play(BLACK, loc = A.nextStep(board, BLACK));	// without check
+		else	// white turn
+			board.play(WHITE, loc = B.nextStep(board, WHITE));	// without check
 		if (loc == -1)
 			++status;
 		else
@@ -32,7 +28,7 @@ namespace Othello{
 		return loc;
 	}
 
-	void Round::nextStep(int loc){
+	void RoundBase::nextStep(int loc){
 		if (isEnd())
 			return;
 
@@ -48,7 +44,7 @@ namespace Othello{
 			status = 2;
 	}
 
-	int Round::play(){
+	int RoundBase::play(){
 		do{
 			nextStep();
 		}while (!isEnd());
