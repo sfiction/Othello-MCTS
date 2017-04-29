@@ -86,6 +86,10 @@ namespace Othello{
 		ull getPossibleUll(Color color) const;
 		ull getPossibleUllOld(Color color) const;
 
+		ull haveStep(Color color) const{
+			return getPossibleUll(color) != 0;
+		}
+
 		/**
 		 * @brief	possible steps of color
 		 * @return	location is (ret[i] >> 3, ret[i] & 7)
