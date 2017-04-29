@@ -75,6 +75,9 @@ namespace Othello{
 	}
 
 	MCTSPlayer::Node* MCTSPlayer::MCTSEval(const ChessBoard &board, Color color, int timeLimit){	// in miliseconds
+#ifdef DEBUG
+		fprintf(stderr, "MCTSPlayer: search start, color = %s\n", color == BLACK ? "Black" : "White");
+#endif
 		Node *root = new Node(board, color, NULL);
 
 		timeLimit *= MSRatio;
@@ -113,11 +116,9 @@ namespace Othello{
 			}
 			++tot;
 		}while ((int)(clock() - startTime) <= timeLimit);
-
 #ifdef DEBUG
 		fprintf(stderr, "MCTSPlayer: simulate rounds: %d\n", tot * iterN);
 #endif
-
 		return root;
 	}
 
@@ -125,13 +126,10 @@ namespace Othello{
 		if (!board.haveStep(color))
 			return -1;
 
-#ifdef DEBUG
-		fprintf(stderr, "MCTSPlayer: search start, color = %s\n", color == BLACK ? "Black" : "White");
-#endif
 
 		auto root = MCTSEval(board, color);
 		int id = root->bestChildRate(), loc = root->loc[id];
-		
+
 #ifdef DEBUG
 		double ratio = root->child[id]->rate();
 		fprintf(stderr, "MCTSPlayer: step: %d (%d, %d), ratio: %.8f\n", loc, loc >> 3, loc & 7, ratio);
@@ -140,7 +138,7 @@ namespace Othello{
 			fprintf(stderr, "(%d, %d), ", root->child[i]->q, root->child[i]->n);
 		}
 		fprintf(stderr, "\n");
-#endif	
+#endif
 
 		delete root;
 
@@ -150,6 +148,17 @@ namespace Othello{
 	pair<int, double> MCTSPlayer::evaluate(const ChessBoard &board, Color color, int timeLimit){
 		auto root = MCTSEval(board, color, timeLimit);
 		int id = root->bestChildRate(), loc = root->loc[id];
+
+#ifdef DEBUG
+		double ratio = root->child[id]->rate();
+		fprintf(stderr, "MCTSPlayer: step: %d (%d, %d), ratio: %.8f\n", loc, loc >> 3, loc & 7, ratio);
+		
+		for (size_t i = 0; i < root->loc.size(); ++i){
+			fprintf(stderr, "(%d, %d), ", root->child[i]->q, root->child[i]->n);
+		}
+		fprintf(stderr, "\n");
+#endif
+
 		double rate = root->child[id]->rate();
 		delete root;
 		return make_pair(loc, rate);
@@ -158,16 +167,14 @@ namespace Othello{
 	int MCTSMMPlayer::nextStep(const ChessBoard &board, Color color){
 		if (!board.haveStep(color))
 			return -1;
-		const int timeLimit = 100;
+		const int timeLimit = 1000;
 		if (64 - board.count() <= 16){
 			int startTime = clock();
 			auto res = MinMaxPlayer::calcMinMax(board, color);
 			if (res.second)
 				return res.first;
-			else{
-				printf("%d\n", (int)((clock() - startTime) / MSRatio));
+			else
 				return MCTSPlayer::evaluate(board, color, timeLimit - (clock() - startTime) / MSRatio).first;
-			}
 		}
 		else
 			return MCTSPlayer::evaluate(board, color, timeLimit).first;

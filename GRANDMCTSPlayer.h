@@ -32,6 +32,17 @@ namespace Othello{
 		GRANDMCTSPlayer();
 		int nextStep(const ChessBoard &board, Color color);
 	};
+	
+	/**
+	 * @brief	AI implemented by MCTS & MM instructed by Grandmasters 
+	 */
+	class GRANDMCTSMMPlayer: public MCTSMMPlayer{
+		Grandmaster* Master;
+		
+	public:
+		GRANDMCTSMMPlayer();
+		int nextStep(const ChessBoard &board, Color color);
+	};
 }
 
 #endif

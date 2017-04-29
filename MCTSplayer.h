@@ -81,7 +81,7 @@ namespace Othello{
 		 * @param	timeLimit	time limit in miliseconds. default 500ms
 		 * @reutrn	the root of generated tree
 		 */
-		Node* MCTSEval(const ChessBoard &board, Color color, int timeLimit = 100);
+		Node* MCTSEval(const ChessBoard &board, Color color, int timeLimit = 1000);
 
 	public:
 		int nextStep(const ChessBoard &board, Color color);
