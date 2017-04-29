@@ -1,10 +1,10 @@
 #include "MinMaxplayer.h"
 
 namespace Othello{
-	int MinMaxPlayer::calcMinMax(const ChessBoard &board, Color color){
+	pair<int, bool> MinMaxPlayer::calcMinMax(const ChessBoard &board, Color color){
 		ull pos = board.getPossibleUll(color);
 		if (pos == 0)
-			return -1;
+			return make_pair(-1, true);
 
 		ChessBoard tb;
 		int res = color == BLACK ? -2 : 2, ret, loc = -1;
@@ -21,8 +21,8 @@ namespace Othello{
 //					printf("WHITE loc-%d = %d\n", i, ret);
 				}
 			}
-		fprintf(stderr, "color: %s\nresult check = %d, %d\n", color == BLACK ? "BLACK" : "WHITE", res, loc);
-		return loc;
+		fprintf(stderr, "+++++++++++++ MinMaxPlayer: color: %s\nresult check = %d, %d\n", color == BLACK ? "BLACK" : "WHITE", res, loc);
+		return make_pair(loc, color == BLACK ? res != -1 : res != 1);
 	}
 
 	int MinMaxPlayer::minValue(const ChessBoard &board, int a, int b){

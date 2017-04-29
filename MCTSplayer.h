@@ -15,6 +15,7 @@
 #include "basic.h"
 #include "chessboard.h"
 #include "player.h"
+#include "MinMaxplayer.h"
 #include "round.h"
 
 namespace Othello{
@@ -23,7 +24,7 @@ namespace Othello{
 	/**
 	 * @brief	AI implemented by MCTS
 	 */
-	class MCTSPlayer: public Player{
+	class MCTSPlayer: virtual public Player{
 	protected:
 		struct Node{
 			int q, n;	/// total score; total rounds
@@ -88,6 +89,21 @@ namespace Othello{
 		 * @brief	evaluate the winning percentage of current board & color
 		 */
 		pair<int, double> evaluate(const ChessBoard &board, Color color);
+	};
+
+	class MCTSMMPlayer: public MCTSPlayer, public MinMaxPlayer{
+	public:
+		int nextStep(const ChessBoard &board, Color color){
+			if (64 - board.count() <= 16){
+				auto res = MinMaxPlayer::calcMinMax(board, color);
+				if (res.second)
+					return res.first;
+				else
+					return MCTSPlayer::nextStep(board, color);
+			}
+			else
+				return MCTSPlayer::nextStep(board, color);
+		}
 	};
 }
 

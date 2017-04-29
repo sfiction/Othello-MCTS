@@ -42,6 +42,10 @@ namespace Othello{
 			return board[WHITE];
 		}
 
+		int count() const{
+			return __builtin_popcountll(board[BLACK] | board[WHITE]);
+		}
+
 		int countBlack() const{
 			return __builtin_popcountll(board[BLACK]);
 		}

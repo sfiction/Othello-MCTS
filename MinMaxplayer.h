@@ -22,17 +22,17 @@ namespace Othello{
 	/**
 	 * @brief	AI implemented by Min-Max
 	 */
-	class MinMaxPlayer: public Player{
+	class MinMaxPlayer: virtual public Player{
 		int lastLoc;
 
 	protected:
-		static int calcMinMax(const ChessBoard &board, Color color);
+		static pair<int, bool> calcMinMax(const ChessBoard &board, Color color);
 		static int minValue(const ChessBoard &board, int a, int b);
 		static int maxValue(const ChessBoard &board, int a, int b);
 
 	public:
 		int nextStep(const ChessBoard &board, Color color){
-			return calcMinMax(board, color);
+			return calcMinMax(board, color).first;
 		}
 	};
 }
