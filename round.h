@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "basic.h"
-#include "chessboard.h"
+#include "chessBoard.h"
 #include "player.h"
 
 namespace Othello{

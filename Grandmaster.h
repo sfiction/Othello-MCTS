@@ -16,7 +16,7 @@
 #include <cstring>
 #include <cassert>
 #include "basic.h"
-#include "chessboard.h"
+#include "chessBoard.h"
 #include "player.h"
 #include "round.h"
 

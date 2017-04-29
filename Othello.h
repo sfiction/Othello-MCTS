@@ -2,7 +2,7 @@
 #define __OTHELLO_OTHELLO
 
 #include "basic.h"
-#include "chessboard.h"
+#include "chessBoard.h"
 #include "player.h"
 #include "round.h"
 #include "MinMaxplayer.h"
