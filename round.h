@@ -61,7 +61,7 @@ namespace Othello{
 		/**
 		 * @brief	time cost of last step in milisecons
 		 */
-		double getTime(){
+		double getTimeCost(){
 			return timeCost;
 		}
 
@@ -74,6 +74,7 @@ namespace Othello{
 
 		void nextStep(int loc){
 			RoundBase::nextStep(loc);
+			timeCost = 0.0;
 		}
 	};
 }
