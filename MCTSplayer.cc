@@ -74,10 +74,11 @@ namespace Othello{
 		return ret;
 	}
 
-	MCTSPlayer::Node* MCTSPlayer::MCTSEval(const ChessBoard &board, Color color){
+	MCTSPlayer::Node* MCTSPlayer::MCTSEval(const ChessBoard &board, Color color, int timeLimit){	// in miliseconds
 		Node *root = new Node(board, color, NULL);
 
-		const int iterN = 1e3, timeLimit = 0.5 * CLOCKS_PER_SEC;
+		timeLimit *= MSRatio;
+		const int iterN = 1e3;
 		clock_t startTime = clock();
 		int tot = 0;
 		RandomPlayer A;
@@ -111,7 +112,7 @@ namespace Othello{
 				}
 			}
 			++tot;
-		}while (clock() - startTime <= timeLimit);
+		}while ((int)(clock() - startTime) <= timeLimit);
 
 #ifdef DEBUG
 		fprintf(stderr, "MCTSPlayer: simulate rounds: %d\n", tot * iterN);
@@ -121,6 +122,9 @@ namespace Othello{
 	}
 
 	int MCTSPlayer::nextStep(const ChessBoard &board, Color color){
+		if (!board.haveStep(color))
+			return -1;
+
 #ifdef DEBUG
 		fprintf(stderr, "MCTSPlayer: search start, color = %s\n", color == BLACK ? "Black" : "White");
 #endif
@@ -143,12 +147,30 @@ namespace Othello{
 		return loc;
 	}
 
-	pair<int, double> MCTSPlayer::evaluate(const ChessBoard &board, Color color){
-		auto root = MCTSEval(board, color);
+	pair<int, double> MCTSPlayer::evaluate(const ChessBoard &board, Color color, int timeLimit){
+		auto root = MCTSEval(board, color, timeLimit);
 		int id = root->bestChildRate(), loc = root->loc[id];
 		double rate = root->child[id]->rate();
 		delete root;
 		return make_pair(loc, rate);
+	}
+
+	int MCTSMMPlayer::nextStep(const ChessBoard &board, Color color){
+		if (!board.haveStep(color))
+			return -1;
+		const int timeLimit = 100;
+		if (64 - board.count() <= 16){
+			int startTime = clock();
+			auto res = MinMaxPlayer::calcMinMax(board, color);
+			if (res.second)
+				return res.first;
+			else{
+				printf("%d\n", (int)((clock() - startTime) / MSRatio));
+				return MCTSPlayer::evaluate(board, color, timeLimit - (clock() - startTime) / MSRatio).first;
+			}
+		}
+		else
+			return MCTSPlayer::evaluate(board, color, timeLimit).first;
 	}
 }
 

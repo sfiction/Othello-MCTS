@@ -23,6 +23,7 @@ namespace Othello{
 
 	const int dire[8][2] = {-1, 0, -1, 1, 0, 1, 1, 1, 1, 0, 1, -1, 0, -1, -1, -1};
 	const int dloc[8] = {-8, -7, 1, 9, 8, 7, -1, -9};
+	const int MSRatio = CLOCKS_PER_SEC / 1000;
 }
 
 #endif

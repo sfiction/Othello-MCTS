@@ -18,7 +18,6 @@ namespace Othello{
 				else{
 					if (res > (ret = maxValue(tb, -1, res)))
 						res = ret, loc = i;
-//					printf("WHITE loc-%d = %d\n", i, ret);
 				}
 			}
 		fprintf(stderr, "+++++++++++++ MinMaxPlayer: color: %s\nresult check = %d, %d\n", color == BLACK ? "BLACK" : "WHITE", res, loc);
@@ -26,11 +25,8 @@ namespace Othello{
 	}
 
 	int MinMaxPlayer::minValue(const ChessBoard &board, int a, int b){
-		if (board.isFull()){
-			
-//					printf("WHITE result %d %d\n", board.countBlack(), board.countWhite());
+		if (board.isFull())
 			return board.getResult();
-		}
 
 		ull pos = board.getPossibleUll(WHITE);
 		if (pos == 0){
@@ -46,7 +42,6 @@ namespace Othello{
 			if (pos & 1){
 				tb = board, tb.play(WHITE, i);
 				ret = min(ret, maxValue(tb, a, b));
-//					printf("inner WHITE loc-%d = %d\n", i, ret);
 				if (ret <= a)
 					return ret;
 				b = min(b, ret);
@@ -55,10 +50,8 @@ namespace Othello{
 	}
 
 	int MinMaxPlayer::maxValue(const ChessBoard &board, int a, int b){
-		if (board.isFull()){
-//			printf("BLACK result %d %d\n", board.countBlack(), board.countWhite());
+		if (board.isFull())
 			return board.getResult();
-		}
 
 		ull pos = board.getPossibleUll(BLACK);
 		if (pos == 0){
@@ -74,7 +67,6 @@ namespace Othello{
 			if (pos & 1){
 				tb = board, tb.play(BLACK, i);
 				ret = max(ret, minValue(tb, a, b));
-//					printf("inner BLACK loc-%d = %d\n", i, ret);
 				if (ret >= b)
 					return ret;
 				a = max(a, ret);

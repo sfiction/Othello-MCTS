@@ -78,32 +78,24 @@ namespace Othello{
 
 		/**
 		 * @brief	evaluate current chess board by MCTS
+		 * @param	timeLimit	time limit in miliseconds. default 500ms
 		 * @reutrn	the root of generated tree
 		 */
-		Node* MCTSEval(const ChessBoard &board, Color color);
+		Node* MCTSEval(const ChessBoard &board, Color color, int timeLimit = 100);
 
 	public:
 		int nextStep(const ChessBoard &board, Color color);
 
 		/**
 		 * @brief	evaluate the winning percentage of current board & color
+		 * @param	timeLimit	time limit in miliseconds. default 500ms
 		 */
-		pair<int, double> evaluate(const ChessBoard &board, Color color);
+		pair<int, double> evaluate(const ChessBoard &board, Color color, int timeLimit = 500);
 	};
 
 	class MCTSMMPlayer: public MCTSPlayer, public MinMaxPlayer{
 	public:
-		int nextStep(const ChessBoard &board, Color color){
-			if (64 - board.count() <= 16){
-				auto res = MinMaxPlayer::calcMinMax(board, color);
-				if (res.second)
-					return res.first;
-				else
-					return MCTSPlayer::nextStep(board, color);
-			}
-			else
-				return MCTSPlayer::nextStep(board, color);
-		}
+		int nextStep(const ChessBoard &board, Color color);
 	};
 }
 
