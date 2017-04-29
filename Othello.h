@@ -5,6 +5,7 @@
 #include "chessboard.h"
 #include "player.h"
 #include "round.h"
+#include "MinMaxplayer.h"
 #include "MCTSplayer.h"
 #include "GRANDMCTSPlayer.h"
 
