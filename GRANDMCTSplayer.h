@@ -13,7 +13,7 @@
 #include <ctime>
 #include <random>
 #include "basic.h"
-#include "chessboard.h"
+#include "chessBoard.h"
 #include "player.h"
 #include "round.h"
 #include "Grandmaster.h"

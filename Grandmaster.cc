@@ -7,9 +7,9 @@ namespace Othello{
 				manual[i][j].clear();
 			}
 		char *s = new char[222];
-		freopen("Chess_manual-WThor-GlobalPartial-Zip.txt", "r", stdin);
+		FILE *fin = fopen("Chess_manual-WThor-GlobalPartial-Zip.txt", "r");
 		//int _ = 0;
-		while (scanf("%s", s) != EOF){
+		while (fscanf(fin, "%s", s) != EOF){
 			ChessBoard *board = new ChessBoard();
 			int l = strlen(s);
 			for (int i = 0, j = 0, c = 0; i < l; i += 2, ++j){
