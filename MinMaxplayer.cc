@@ -28,24 +28,24 @@ namespace Othello{
 		if (board.isFull())
 			return board.getResult();
 
-		ull pos = board.getPossibleUll(WHITE);
-		if (pos == 0){
-			if (board.getPossibleUll(BLACK) == 0)
+		vector<int> pos = board.getPossible(WHITE);
+		if (pos.size() == 0){
+			if (!board.haveStep(BLACK))
 				return board.getResult();
 			else
 				return maxValue(board, a, b);
 		}
 
+		random_shuffle(pos.begin(), pos.end());
 		ChessBoard tb;
 		int ret = 1;
-		for (int i = 0; pos; ++i, pos >>= 1)
-			if (pos & 1){
-				tb = board, tb.play(WHITE, i);
-				ret = min(ret, maxValue(tb, a, b));
-				if (ret <= a)
-					return ret;
-				b = min(b, ret);
-			}
+		for (size_t i = 0; i < pos.size(); ++i){
+			tb = board, tb.play(WHITE, pos[i]);
+			ret = min(ret, maxValue(tb, a, b));
+			if (ret <= a)
+				return ret;
+			b = min(b, ret);
+		}
 		return ret;
 	}
 
@@ -53,24 +53,24 @@ namespace Othello{
 		if (board.isFull())
 			return board.getResult();
 
-		ull pos = board.getPossibleUll(BLACK);
-		if (pos == 0){
-			if (board.getPossibleUll(WHITE) == 0)
+		vector<int> pos = board.getPossible(BLACK);
+		if (pos.size() == 0){
+			if (!board.haveStep(WHITE))
 				return board.getResult();
 			else
 				return minValue(board, a, b);
 		}
 
+		random_shuffle(pos.begin(), pos.end());
 		ChessBoard tb;
 		int ret = -1;
-		for (int i = 0; pos; ++i, pos >>= 1)
-			if (pos & 1){
-				tb = board, tb.play(BLACK, i);
-				ret = max(ret, minValue(tb, a, b));
-				if (ret >= b)
-					return ret;
-				a = max(a, ret);
-			}
+		for (size_t i = 0; i < pos.size(); ++i){
+			tb = board, tb.play(BLACK, pos[i]);
+			ret = max(ret, minValue(tb, a, b));
+			if (ret >= b)
+				return ret;
+			a = max(a, ret);
+		}
 		return ret;
 	}
 }

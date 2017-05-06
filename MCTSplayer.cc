@@ -167,8 +167,8 @@ namespace Othello{
 	int MCTSMMPlayer::nextStep(const ChessBoard &board, Color color){
 		if (!board.haveStep(color))
 			return -1;
-		const int timeLimit = 1000;
-		if (64 - board.count() <= 16){
+		const int timeLimit = 100;
+		if (64 - board.count() <= 17){
 			int startTime = clock();
 			auto res = MinMaxPlayer::calcMinMax(board, color);
 			if (res.second)
