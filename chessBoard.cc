@@ -36,6 +36,9 @@ namespace Othello{
 		static const int n = 8, m = 1 << n;
 		unsigned  sel[n][m][m];
 
+		/*
+		 * @brief	get all possible steps in a line with 8 locations
+		 */
 		static inline unsigned solve(int a, int b){
 			int ret = 0;
 			for (int i = 0; i < 6; ++i)
@@ -74,6 +77,7 @@ namespace Othello{
 				sel[0][i][0] = solve(i, 0);
 			}
 
+			// calc 1+7...7+1 by 0+8
 			for (int k = 1; k < n; ++k){
 				int mlow = (1 << (n - k)) - 1, mhigh = (m - 1) ^ mlow;
 				for (int i = m - 1; i >= 0; --i){
@@ -129,16 +133,20 @@ namespace Othello{
 	bool ChessBoard::check(Color color, int loc) const{
 		const ull &a = board[color], &b = board[!color];	// bad code
 
+		// out of range or be occupied
 		if (!inRange(loc) || ((a | b) & (1ull << loc)))
 			return false;
 
 		const int MASK = ~7;
+		// test all 8 directions
 		for (int i = 0; i < 8; ++i){
 			int x = (loc >> 3) + dire[i][0], y = (loc & 7) + dire[i][1], z = loc + dloc[i];
 			if (!((x | y) & MASK) && (b >> z & 1)){
+				// continues opposite chess pieces
 				do{
 					x += dire[i][0], y += dire[i][1], z += dloc[i];
 				}while (!((x | y) & MASK) && (b >> z & 1));
+				// end with a chess piece in same color
 				if (!((x | y) & MASK) && (a >> z & 1))
 					return true;
 			}
@@ -215,7 +223,7 @@ namespace Othello{
 				| sel[6][a >> 48 & 0xff][b >> 48 & 0xff] << 16 | sel[7][a >> 56 & 0xff][b >> 56 & 0xff] << 24) << 32);
 
 		a = transMinorDiagToRow(ta), b = transMinorDiagToRow(tb);
-		ret |= transMajorDiagToRow(sel[7][a >> 0 & 0xff][b >> 0 & 0xff] << 0 | sel[6][a >> 8 & 0xff][b >> 8 & 0xff] << 8
+		ret |= transMajorDiagToRow(sel[7][a & 0xff][b & 0xff] | sel[6][a >> 8 & 0xff][b >> 8 & 0xff] << 8
 				| sel[5][a >> 16 & 0xff][b >> 16 & 0xff] << 16 | sel[4][a >> 24 & 0xff][b >> 24 & 0xff] << 24
 				| (ull)(sel[3][a >> 32 & 0xff][b >> 32 & 0xff] | sel[2][a >> 40 & 0xff][b >> 40 & 0xff] << 8
 				| sel[1][a >> 48 & 0xff][b >> 48 & 0xff] << 16 | sel[0][a >> 56 & 0xff][b >> 56 & 0xff] << 24) << 32);

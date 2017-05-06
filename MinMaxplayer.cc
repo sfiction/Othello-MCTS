@@ -8,6 +8,7 @@ namespace Othello{
 
 		ChessBoard tb;
 		int res = color == BLACK ? -2 : 2, ret, loc = -1;
+		// test all possible steps
 		for (int i = 0; pos; ++i, pos >>= 1)
 			if (pos & 1){
 				tb = board, tb.play(color, i);
@@ -29,13 +30,15 @@ namespace Othello{
 			return board.getResult();
 
 		vector<int> pos = board.getPossible(WHITE);
+		// no possible steps
 		if (pos.size() == 0){
-			if (!board.haveStep(BLACK))
+			if (!board.haveStep(BLACK))	// is a terminal state
 				return board.getResult();
 			else
 				return maxValue(board, a, b);
 		}
 
+		// randomly expand
 		random_shuffle(pos.begin(), pos.end());
 		ChessBoard tb;
 		int ret = 1;

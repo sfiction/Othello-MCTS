@@ -25,6 +25,11 @@ namespace Othello{
 		int lastLoc;
 
 	protected:
+		/*
+		 * @brief	Min-Max search on a chess board
+		 * @return	.first: best step
+		 * @return	.second: win or not
+		 */
 		static pair<int, bool> calcMinMax(const ChessBoard &board, Color color);
 		static int minValue(const ChessBoard &board, int a, int b);
 		static int maxValue(const ChessBoard &board, int a, int b);

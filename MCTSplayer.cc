@@ -23,36 +23,38 @@ namespace Othello{
 	MCTSPlayer::Node::Node(const ChessBoard &board, Color color, Node *fa):
 		q(0), n(0), fa(fa){
 		loc = board.getPossible(color);
-		if (loc.size() == 0)
+		if (loc.size() == 0)	// no possible steps
 			loc.push_back(-1);
 		else{
-			/// randomly select next child to be expanded
+			// randomly select next child to be expanded
 			random_shuffle(loc.begin(), loc.end());
 		}
 	}
 
 	MCTSPlayer::Node::~Node(){
+		// recursively deconstruct nodes
 		for (auto &u: child)
 			delete u;
 	}
 
 	int MCTSPlayer::Node::expand(RoundBase &round){
-		if (loc.size() == child.size())
+		if (loc.size() == child.size())	// all childs has been expanded
 			return -1;
 		else{
 			int ret = child.size();
+			// expand a node and play corresponded step in round
 			round.nextStep(loc[ret]);
 			child.push_back(new Node(round.getBoard(), round.nextColor(), this));
 			return ret;
 		}
 	}
 
-	double MCTSPlayer::Node::value(){
+	double MCTSPlayer::Node::value(){	// UCB tree Policy
 		const double c = 5.0;
 		return (double)q / n + c * sqrt(2.0 * log(fa->n) / n);
 	}
 
-	double MCTSPlayer::Node::rate(){
+	double MCTSPlayer::Node::rate(){	// winning ratio
 		return (double)q / n;
 	}
 
@@ -98,15 +100,15 @@ namespace Othello{
 				}
 				
 				int sign = round.nextColor() == BLACK ? -1 : 1;
-				if (!round.isEnd()){
+				if (!round.isEnd()){	// it's unterminal state
 					sign = -sign;
 					id = u->expand(round);
 					u = u->child[id];
-					/* simulate */
+					/* simulation */
 					round.play();
 				}
 
-				/* backup */
+				/* backpropagation */
 				int reward = round.getResult();
 				for (; u != NULL; u = u->fa){
 					++u->n;
@@ -168,12 +170,13 @@ namespace Othello{
 		if (!board.haveStep(color))
 			return -1;
 		const int timeLimit = 100;
+		// 17 or less empty location remain
 		if (64 - board.count() <= 17){
 			int startTime = clock();
 			auto res = MinMaxPlayer::calcMinMax(board, color);
 			if (res.second)
 				return res.first;
-			else
+			else // struggle when it will lose
 				return MCTSPlayer::evaluate(board, color, timeLimit - (clock() - startTime) / MSRatio).first;
 		}
 		else
