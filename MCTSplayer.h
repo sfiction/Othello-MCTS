@@ -11,7 +11,6 @@
 #define __OTHELLO_MCTSPLAYER
 
 #include <ctime>
-#include <random>
 #include "basic.h"
 #include "chessBoard.h"
 #include "player.h"
@@ -81,7 +80,7 @@ namespace Othello{
 		 * @param	timeLimit	time limit in miliseconds. default 500ms
 		 * @reutrn	the root of generated tree
 		 */
-		Node* MCTSEval(const ChessBoard &board, Color color, int timeLimit = 1000);
+		Node* MCTSEval(const ChessBoard &board, Color color, int timeLimit = 100);
 
 	public:
 		int nextStep(const ChessBoard &board, Color color);

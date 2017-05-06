@@ -10,7 +10,6 @@
 #ifndef __OTHELLO_MINMAXPLAYER
 #define __OTHELLO_MINMAXPLAYER
 
-#include <random>
 #include "basic.h"
 #include "chessBoard.h"
 #include "player.h"

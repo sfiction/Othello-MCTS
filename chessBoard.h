@@ -12,10 +12,9 @@
 #include <vector>
 #include "basic.h"
 
-extern volatile int GUI_x,GUI_y;
+extern volatile int GUI_x, GUI_y;
 extern volatile int flag;
 extern volatile int f[9][9];
-
 
 namespace Othello{
 	using namespace std;

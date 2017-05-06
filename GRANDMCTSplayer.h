@@ -11,7 +11,6 @@
 #define __OTHELLO_GRANDMCTSPLAYER
 
 #include <ctime>
-#include <random>
 #include "basic.h"
 #include "chessBoard.h"
 #include "player.h"

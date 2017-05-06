@@ -11,7 +11,6 @@
 #define __OTHELLO_PLAYER
 
 #include <ctime>
-#include <random>
 #include <windows.h>
 #include "basic.h"
 #include "chessBoard.h"

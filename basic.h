@@ -1,6 +1,8 @@
 #ifndef __OTHELLO_BASIC
 #define __OTHELLO_BASIC
 
+#define __int128 long long
+
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>

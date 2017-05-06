@@ -110,13 +110,14 @@ namespace Othello{
 		const ull &black = board[0], &white = board[1];
 		for (int loc = 0, i = 0; i < 8; ++i){
 			ret.push_back('0' + i), ret.push_back(' ');
-			for (int j = 0; j < 8; ++j, ++loc)
-				if(black >> loc & 1){
-					f[loc%8][loc/8] = 1;
+			for (int j = 0; j < 8; ++j, ++loc){
+				if (black >> loc & 1){
+					f[loc & 7][loc >> 3] = 1;
 				}else if(white >> loc & 1){
-					f[loc%8][loc/8] = 2;
+					f[loc & 7][loc >> 3] = 2;
 				}
 				ret.push_back(black >> loc & 1 ? 'X' : white >> loc & 1 ? 'O' : '.');
+			}
 			ret.push_back('\n');
 		}
 		return ret;

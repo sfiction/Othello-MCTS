@@ -11,7 +11,6 @@
 #define __OTHELLO_GRANDMASTER
 
 #include <ctime>
-#include <random>
 #include <map>
 #include <cstring>
 #include <cassert>
