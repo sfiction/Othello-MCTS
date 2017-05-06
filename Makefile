@@ -1,8 +1,8 @@
 CC=g++
-CPPFLAGS=-Wall -O2 -std=c++11
+CPPFLAGS=-Wall -O2 -std=c++11 -g -DDEBUG -DGLUT_DISABLE_ATEXIT_HACK
 INCLUDEFLAGS=
-LDFLAGS=
-OBJS=chessboard.o player.o round.o MCTSplayer.o main.o
+LDFLAGS=-lopengl32 -lglu32 -lglut32
+OBJS=chessboard.o player.o round.o MCTSplayer.o
 TARGETS=Othello
 
 .PHONY: all
