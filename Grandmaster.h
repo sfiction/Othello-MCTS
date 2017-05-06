@@ -29,11 +29,19 @@ namespace Othello{
 	 */
 	class Grandmaster {
 		Grandmaster();
-		static Grandmaster * gmInstance;
-		static map<MTD, int> manual[60][2];
+		static Grandmaster * gmInstance;	/// the point of the singleton class
+		static map<MTD, int> manual[60][2];	/// map to store the strategy for different chessboard
 
 	public:
+		/**
+		 * @brief	get the point of the class or init the class when first use
+		 * @return	the point
+		 */
 		static Grandmaster * GetInstance();
+		/**
+		 * @brief	query the strategy for some chessboard
+		 * @return	the strategy
+		 */
 		static vector<pair<int, int> > askGrandmaster(const ChessBoard &board, Color color);
 	};
 }
